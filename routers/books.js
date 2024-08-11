@@ -7,6 +7,10 @@ router
   .get(bookController.getAllBooks)
   .post(bookController.addNewBook);
 
-router.route("/books/:id").get(bookController.getSingleBook);
+router
+  .route("/books/:id")
+  .get(bookController.getSingleBook)
+  .patch(bookController.updateBook)
+  .delete(bookController.deleteCourse);
 
 module.exports = router;
