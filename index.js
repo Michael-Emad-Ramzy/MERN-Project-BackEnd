@@ -4,7 +4,7 @@ const cors = require("cors");
 const app = express();
 const mongoose = require("mongoose");
 const url = process.env.mongo_url;
-const book = require("./models/books");
+const routes = require("./routers/books");
 //connect to database
 mongoose
   .connect(url)
@@ -17,12 +17,7 @@ mongoose
 
 app.use(cors());
 app.use(express.json());
-
-// app.get("/home", async (req, res) => {
-//   const books = await book.find();
-//   res.json({ status: "success", data: { books } });
-// });
-
+app.use(routes);
 //middel ware for not find routes
 app.all("*", (req, res) => {
   res
