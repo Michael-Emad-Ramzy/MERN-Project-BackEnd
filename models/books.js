@@ -6,9 +6,9 @@ const bookSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
-  photo: {
+  image: {
     type: String,
-    required: true,
+    required: false,
   },
   categoryId: {
     type: mongoose.Schema.ObjectId,

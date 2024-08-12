@@ -4,7 +4,8 @@ const cors = require("cors");
 const app = express();
 const mongoose = require("mongoose");
 const url = process.env.mongo_url;
-const routes = require("./routers/books");
+const path = require("path");
+
 //connect to database
 mongoose
   .connect(url)
@@ -17,14 +18,18 @@ mongoose
 
 app.use(cors());
 app.use(express.json());
-app.use(routes);
-//middel ware for not find routes
+
+//routers
+app.use("/", require("./routers/books"));
+app.use("/", require("./routers/upload"));
+
+// middel ware for not find routes
 app.all("*", (req, res) => {
   res
     .status(404)
     .json({ status: "ERROR", message: "No route defined for this :(" });
 });
 
-app.listen(process.env.port, () => {
+app.listen(process.env.port || 3000, () => {
   console.log(`port ${process.env.port} listen`);
 });
