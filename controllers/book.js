@@ -1,4 +1,5 @@
 const book = require("../models/books");
+const cloudinary = require("cloudinary").v2;
 
 const getAllBooks = async (req, res) => {
   const books = await book.find({}, { __v: false });
@@ -33,6 +34,36 @@ const addNewBook = async (req, res) => {
   }
 };
 
+// const addNewBook = async (req, res) => {
+//   try {
+//     console.log(req.body);
+//     if (!req.file) {
+//       return res
+//         .status(400)
+//         .json({ status: "Fail", message: "No file uploaded" });
+//     }
+//     // Upload the image to Cloudinary
+//     const result = await cloudinary.uploader.upload(req.file.path);
+
+//     // Create a new book with the image URL
+//     const newBook = new Book({
+//       title: req.body.title,
+//       photo: result.secure_url, // Save the image URL from Cloudinary
+//       categoryId: req.body.categoryId,
+//       authorId: req.body.authorId,
+//     });
+
+//     // Save the new book to the database
+//     await newBook.save();
+
+//     res.status(201).json({ status: "Success", data: { newBook } });
+//   } catch (e) {
+//     res
+//       .status(500)
+//       .json({ status: "Fail", data: "Null", message: e.message, code: 400 });
+//   }
+// };
+
 const updateBook = async (req, res) => {
   const bookId = req.params.id;
   try {
@@ -49,7 +80,7 @@ const updateBook = async (req, res) => {
 };
 
 const deleteCourse = async (req, res) => {
-  const deletedCourse = await book.deleteOne({ _id: req.params.id });
+  await book.deleteOne({ _id: req.params.id });
   res.status(200).json({ status: "Success", data: "Null" });
 };
 module.exports = {
