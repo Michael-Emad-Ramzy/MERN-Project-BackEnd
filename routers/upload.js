@@ -20,20 +20,29 @@ const upload = multer({ storage });
 
 //api/upload
 router.post("/upload", upload.single("image"), function (req, res) {
-  cloudinary.uploader.upload(req.file.path, function (err, result) {
-    if (err) {
-      console.log(err);
-      return res.status(500).json({
-        success: false,
-        message: "Error",
+  cloudinary.uploader.upload(req.file.path, async (err, result) => {
+    try {
+      if (err) {
+        console.log(err);
+        return res.status(500).json({
+          success: false,
+          message: "Error",
+        });
+      }
+      const newBook = new Book({
+        title: req.body.title,
+        image: result.secure_url,
+        // categoryId: req.body.categoryId,
+        // authorId: req.body.authorId,
       });
-    }
+      await newBook.save();
 
-    res.status(200).json({
-      success: true,
-      message: "Uploaded!",
-      data: result,
-    });
+      res.status(201).json({ status: "Success", data: { newBook } });
+    } catch (e) {
+      res
+        .status(500)
+        .json({ status: "Fail", data: "Null", message: e.message, code: 400 });
+    }
   });
 });
 
