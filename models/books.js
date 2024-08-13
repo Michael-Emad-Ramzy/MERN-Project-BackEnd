@@ -8,11 +8,12 @@ const bookSchema = new mongoose.Schema({
   },
   image: {
     type: String,
-    required: false,
+    required: true,
   },
   categoryId: {
     type: mongoose.Schema.ObjectId,
     ref: "category",
+    required: true,
   },
   authorId: {
     type: mongoose.Schema.ObjectId,
