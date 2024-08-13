@@ -22,6 +22,7 @@ app.use(express.json());
 //routers
 app.use("/", require("./routers/books"));
 app.use("/", require("./routers/upload"));
+app.use("/", require("./routers/category"));
 
 // middel ware for not find routes
 app.all("*", (req, res) => {
