@@ -13,10 +13,12 @@ const bookSchema = new mongoose.Schema({
   categoryId: {
     type: mongoose.Schema.ObjectId,
     ref: "category",
+    required: true,
   },
   authorId: {
     type: mongoose.Schema.ObjectId,
     ref: "author",
+    required: true,
   },
 });
 
