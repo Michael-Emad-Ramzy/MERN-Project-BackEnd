@@ -22,40 +22,10 @@ const getSingleBook = async (req, res) => {
   }
 };
 
-const addNewBook = async (req, res) => {
-  try {
-    const newBook = book(req.body);
-    await newBook.save();
-    res.status(201).json({ status: "Success", data: { newBook } });
-  } catch (e) {
-    res
-      .status(500)
-      .json({ status: "Fail", data: "Null", message: e.message, code: 400 });
-  }
-};
-
 // const addNewBook = async (req, res) => {
 //   try {
-//     console.log(req.body);
-//     if (!req.file) {
-//       return res
-//         .status(400)
-//         .json({ status: "Fail", message: "No file uploaded" });
-//     }
-//     // Upload the image to Cloudinary
-//     const result = await cloudinary.uploader.upload(req.file.path);
-
-//     // Create a new book with the image URL
-//     const newBook = new Book({
-//       title: req.body.title,
-//       photo: result.secure_url, // Save the image URL from Cloudinary
-//       categoryId: req.body.categoryId,
-//       authorId: req.body.authorId,
-//     });
-
-//     // Save the new book to the database
+//     const newBook = book(req.body);
 //     await newBook.save();
-
 //     res.status(201).json({ status: "Success", data: { newBook } });
 //   } catch (e) {
 //     res
@@ -63,6 +33,33 @@ const addNewBook = async (req, res) => {
 //       .json({ status: "Fail", data: "Null", message: e.message, code: 400 });
 //   }
 // };
+
+const addNewBook = function (req, res) {
+  cloudinary.uploader.upload(req.file.path, async (err, result) => {
+    try {
+      if (err) {
+        console.log(err);
+        return res.status(500).json({
+          success: false,
+          message: "Error",
+        });
+      }
+      const newBook = new book({
+        title: req.body.title,
+        image: result.secure_url,
+        categoryId: req.body.categoryId,
+        // authorId: req.body.authorId,
+      });
+      await newBook.save();
+
+      res.status(201).json({ status: "Success", data: { newBook } });
+    } catch (e) {
+      res
+        .status(500)
+        .json({ status: "Fail", data: "Null", message: e.message, code: 400 });
+    }
+  });
+};
 
 const updateBook = async (req, res) => {
   const bookId = req.params.id;
