@@ -48,7 +48,7 @@ const addNewBook = function (req, res) {
         title: req.body.title,
         image: result.secure_url,
         categoryId: req.body.categoryId,
-        // authorId: req.body.authorId,
+        authorId: req.body.authorId,
       });
       await newBook.save();
 
@@ -76,7 +76,7 @@ const updateBook = async (req, res) => {
   }
 };
 
-const deleteCourse = async (req, res) => {
+const deleteBook = async (req, res) => {
   await book.deleteOne({ _id: req.params.id });
   res.status(200).json({ status: "Success", data: "Null" });
 };
@@ -85,5 +85,5 @@ module.exports = {
   getSingleBook,
   addNewBook,
   updateBook,
-  deleteCourse,
+  deleteBook,
 };

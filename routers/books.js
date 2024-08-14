@@ -28,6 +28,6 @@ router
   .route("/books/:id")
   .get(bookController.getSingleBook)
   .patch(bookController.updateBook)
-  .delete(bookController.deleteCourse);
+  .delete(bookController.deleteBook);
 
 module.exports = router;
