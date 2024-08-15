@@ -13,7 +13,10 @@ const getAllAuthors = async (req, res) => {
     //         .limit(limit)
     //         .skip(skip);
     //     } else {
-    const authors = await author.find().limit(limit).skip(skip);
+    const authors = await author
+      .find({}, { __v: false })
+      .limit(limit)
+      .skip(skip);
     // }
     res.json({ status: "success", data: { authors } });
   } catch (e) {

@@ -8,7 +8,7 @@ const {
 } = require("../middleware/author-validation");
 
 router
-  .route("/authors")
+  .route("/")
   .get(authorController.getAllAuthors)
   .post(
     authorInformationConfirmation,
@@ -17,7 +17,7 @@ router
   );
 
 router
-  .route("/authors/:id")
+  .route("/:id")
   .get(authorController.getOneAuthor)
   .patch(
     authorInformationConfirmation,
