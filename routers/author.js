@@ -6,6 +6,8 @@ const {
   authorInformationConfirmation,
   validationresult,
 } = require("../middleware/author-validation");
+const verfiyToken = require("../middleware/verfiyToken.js");
+const allowedTo = require("../middleware/allowedTo.js");
 
 router
   .route("/")
@@ -22,8 +24,10 @@ router
   .patch(
     authorInformationConfirmation,
     validationresult,
+    verfiyToken,
+    allowedTo("ADMIN"),
     authorController.updateAuthor
   )
-  .delete(authorController.deleteAuthor);
+  .delete(verfiyToken, allowedTo("ADMIN"), authorController.deleteAuthor);
 
 module.exports = router;
