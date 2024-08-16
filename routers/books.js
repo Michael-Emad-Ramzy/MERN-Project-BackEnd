@@ -3,6 +3,8 @@ const router = express.Router();
 const bookController = require("../controllers/book");
 const multer = require("multer");
 const path = require("path");
+const verfiyToken = require("../middleware/verfiyToken");
+const allowedTo = require("../middleware/allowedTo");
 const cloudinary = require("cloudinary").v2;
 
 cloudinary.config({
@@ -22,12 +24,14 @@ const upload = multer({ storage });
 router
   .route("/books")
   .get(bookController.getAllBooks)
-  .post(upload.single("image"), bookController.addNewBook);
+  .post(verfiyToken,allowedTo("ADMIN"),upload.single("image"), bookController.addNewBook);
 
 router
   .route("/books/:id")
   .get(bookController.getSingleBook)
-  .patch(bookController.updateBook)
-  .delete(bookController.deleteBook);
+
+  .patch(verfiyToken,allowedTo("ADMIN"),bookController.updateBook)
+  .delete(verfiyToken,allowedTo("ADMIN"),bookController.deleteCourse);
+
 
 module.exports = router;

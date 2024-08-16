@@ -5,13 +5,15 @@ const {
   categoryNameValidation,
   validationresult,
 } = require("../middleware/category-validation.js");
+const verfiyToken = require("../middleware/verfiyToken.js");
+const allowedTo = require("../middleware/allowedTo.js");
 
 router
   .route("/categories")
   .get(categoryController.getAllCategory)
   .post(
     categoryNameValidation,
-    validationresult,
+    validationresult,verfiyToken,allowedTo("ADMIN"),
     categoryController.createNewCategory
   );
 router
@@ -19,9 +21,9 @@ router
   .get(categoryController.getSingleCategory)
   .patch(
     categoryNameValidation,
-    validationresult,
+    validationresult,verfiyToken,allowedTo("ADMIN"),
     categoryController.updateCategory
   )
-  .delete(categoryController.deleteCategory);
+  .delete(verfiyToken,allowedTo("ADMIN"),categoryController.deleteCategory);
 
 module.exports = router;

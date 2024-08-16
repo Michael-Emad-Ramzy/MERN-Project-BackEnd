@@ -3,14 +3,7 @@ const User = require("../models/user");
 const { query } = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-
-//generate JWT token function
-const generateToken = async (payload) => {
-  const token = await jwt.sign(payload, process.env.JWT_SECRET_KEY, {
-    expiresIn: "5m",
-  });
-  return token;
-};
+const generateToken = require("../utils/generateJWT.js");
 
 /////////////////////////get all users///////////////////////////
 const getAllUsers = async (req, res) => {
@@ -30,7 +23,7 @@ const getAllUsers = async (req, res) => {
 ////////////////////////register///////////////////////////
 const register = async (req, res) => {
   try {
-    const { firstName, lastName, email, password } = req.body;
+    const { firstName, lastName, email, password, role } = req.body;
 
     const oldUser = await User.findOne({ email: email });
     if (oldUser) {
@@ -44,11 +37,13 @@ const register = async (req, res) => {
       lastName,
       email,
       password: hashedPassword,
+      role,
     });
 
     const token = await generateToken({
       email: newUser.email,
       _id: newUser._id,
+      role: newUser.role,
     });
     newUser.token = token;
 
@@ -80,7 +75,7 @@ const login = async (req, res) => {
 
     if (user && matchedPassword) {
       // "Logged in successfully"
-      const token = await generateToken({ email: user.email, _id: user._id });
+      const token = await generateToken({ email: user.email, _id: user._id , role: newUser.role,});
 
       return res.status(200).json({
         status: "success",
