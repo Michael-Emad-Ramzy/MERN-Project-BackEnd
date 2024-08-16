@@ -29,7 +29,9 @@ router
 router
   .route("/books/:id")
   .get(bookController.getSingleBook)
+
   .patch(verfiyToken,allowedTo("ADMIN"),bookController.updateBook)
   .delete(verfiyToken,allowedTo("ADMIN"),bookController.deleteCourse);
+
 
 module.exports = router;
