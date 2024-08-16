@@ -24,14 +24,17 @@ const upload = multer({ storage });
 router
   .route("/books")
   .get(bookController.getAllBooks)
-  .post(verfiyToken,allowedTo("ADMIN"),upload.single("image"), bookController.addNewBook);
+  .post(
+    verfiyToken,
+    allowedTo("ADMIN"),
+    upload.single("image"),
+    bookController.addNewBook
+  );
 
 router
   .route("/books/:id")
   .get(bookController.getSingleBook)
-
-  .patch(verfiyToken,allowedTo("ADMIN"),bookController.updateBook)
-  .delete(verfiyToken,allowedTo("ADMIN"),bookController.deleteCourse);
-
+  .patch(verfiyToken, allowedTo("ADMIN"), bookController.updateBook)
+  .delete(verfiyToken, allowedTo("ADMIN"), bookController.deleteCourse);
 
 module.exports = router;
