@@ -20,15 +20,19 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
     validate: [validator.isStrongPassword, "please enter a strong password"],
-    },
-    token: {
-      type: String,
+  },
+  token: {
+    type: String,
   },
   role: {
     type: String,
     enum: ["USER", "ADMIN"],
-    default:"USER"
-    },
+    default: "USER",
+  },
+  avatar: {
+    type: String,
+    default:'uploads/profile.png'
+  },
   books: [
     {
       bookId: {
