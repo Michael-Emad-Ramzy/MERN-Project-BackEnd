@@ -79,7 +79,7 @@ const login = async (req, res) => {
       const token = await generateToken({
         email: user.email,
         _id: user._id,
-        role: newUser.role,
+        role: user.role,
       });
 
       return res.status(200).json({
