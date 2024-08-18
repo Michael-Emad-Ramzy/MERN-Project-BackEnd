@@ -13,7 +13,9 @@ router
   .get(categoryController.getAllCategory)
   .post(
     categoryNameValidation,
-    validationresult,verfiyToken,allowedTo("ADMIN"),
+    validationresult,
+    verfiyToken,
+    allowedTo("ADMIN"),
     categoryController.createNewCategory
   );
 router
@@ -21,9 +23,11 @@ router
   .get(categoryController.getSingleCategory)
   .patch(
     categoryNameValidation,
-    validationresult,verfiyToken,allowedTo("ADMIN"),
+    validationresult,
+    verfiyToken,
+    allowedTo("ADMIN"),
     categoryController.updateCategory
   )
-  .delete(verfiyToken,allowedTo("ADMIN"),categoryController.deleteCategory);
+  .delete(verfiyToken, allowedTo("ADMIN"), categoryController.deleteCategory);
 
 module.exports = router;
