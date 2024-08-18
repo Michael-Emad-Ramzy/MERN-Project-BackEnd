@@ -38,6 +38,7 @@ const register = async (req, res) => {
       email,
       password: hashedPassword,
       role,
+      avatar: req.file.filename,
     });
 
     const token = await generateToken({
@@ -75,7 +76,11 @@ const login = async (req, res) => {
 
     if (user && matchedPassword) {
       // "Logged in successfully"
-      const token = await generateToken({ email: user.email, _id: user._id , role: newUser.role,});
+      const token = await generateToken({
+        email: user.email,
+        _id: user._id,
+        role: newUser.role,
+      });
 
       return res.status(200).json({
         status: "success",
