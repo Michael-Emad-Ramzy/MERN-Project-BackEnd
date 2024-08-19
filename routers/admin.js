@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const adminController = require('../controllers/admin');
-const verfiyAdminToken = require('../middleware/verifyAdminToken');
+const verfiyAdminToken = require('../middleware/verfiyToken');
 
 router.route('/add')
     .post(verfiyAdminToken, adminController.addAdmin)
