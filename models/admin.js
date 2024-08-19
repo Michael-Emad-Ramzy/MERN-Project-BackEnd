@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const validator = require('validator')
 const bcrypt = require('bcrypt');
-const adminRoles = require('../utilities/adminRoles');
+const adminRoles = require('../utils/adminRoles');
 
 const adminSchema = new mongoose.Schema({
     adminName: {
