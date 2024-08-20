@@ -1,9 +1,13 @@
 const { get } = require("mongoose");
+
 const User = require("../models/user");
+const Book = require("../models/books");
+
 const { query } = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const generateToken = require("../utils/generateJWT.js");
+const AppError = require("../utils/AppError.js");
 
 /////////////////////////get all users///////////////////////////
 const getAllUsers = async (req, res) => {
@@ -96,9 +100,45 @@ const login = async (req, res) => {
     return res.status(500).json({ errorMessage: e.message });
   }
 };
+/////////////////////////add a book to the user//////////////////////////
+const addUSerBook = async (req, res) => {
+  try {
+    const user = await User.findById(req.body._id);
+    const newBook = user.books.find(
+      (book) => book.bookId == req.params.id ?? book.book
+    );
+    if (newBook) throw new Error("Already added book!, choose another!");
+    const book = await Book.findById(req.params.id);
+    if (!book) throw new Error("Unknown book!");
+
+    user.books.push({
+      bookId: book._id,
+      rate: 0,
+    });
+    user.save();
+    res.status(200).json(user);
+  } catch (error) {
+    AppError.create(error.meassage, 400)
+  }
+};
+
+///////////////////////get one user book////////////////////////
+exports.getUserOneBook = async (req, res) => {
+  try {
+    const user = await User.findById(req.body._id);
+    const targetBook = user.books.find(
+      (book) => book.book._id == req.params.id ?? book.book
+    );
+    res.status(200).json(targetBook);
+  } catch (error) {
+    AppError.create(error.meassage, 400)
+  }
+};
+
 
 module.exports = {
   getAllUsers,
   register,
   login,
+  addUSerBook,
 };
