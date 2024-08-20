@@ -33,4 +33,8 @@ router.route("/register").post(upload.single('avatar'),userController.register);
 
 router.route("/login").post(userController.login);
 
+
+router.route("/books/:id").post(verfiyToken,userController.addUSerBook);
+
+
 module.exports = router;
