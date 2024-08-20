@@ -15,6 +15,8 @@ router
   .post(
     authorInformationConfirmation,
     validationresult,
+    verfiyToken,
+    allowedTo("ADMIN"),
     authorController.addAuthor
   );
 

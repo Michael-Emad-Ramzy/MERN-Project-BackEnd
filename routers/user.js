@@ -35,4 +35,8 @@ router
 
 router.route("/login").post(userController.login);
 
+
+router.route("/books/:id").post(verfiyToken,userController.addUSerBook);
+
+
 module.exports = router;
