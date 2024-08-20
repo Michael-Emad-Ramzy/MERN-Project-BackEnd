@@ -49,6 +49,7 @@ const addNewBook = function (req, res) {
         image: result.secure_url,
         categoryId: req.body.categoryId,
         authorId: req.body.authorId,
+        rating: req.body.rating,
       });
       await newBook.save();
 
