@@ -1,5 +1,6 @@
 const { query } = require("express");
 const author = require("../models/author");
+const cloudinary = require("cloudinary").v2;
 
 const getAllAuthors = async (req, res) => {
   const limit = query.limit || 10;
@@ -26,7 +27,7 @@ const getAllAuthors = async (req, res) => {
 
 const getOneAuthor = async (req, res) => {
   try {
-    const oneAuthor = await author.findById(req.params.authorId);
+    const oneAuthor = await author.findById(req.params.id);
     if (!oneAuthor) {
       return res
         .status(404)
@@ -39,20 +40,41 @@ const getOneAuthor = async (req, res) => {
 };
 
 const addAuthor = async (req, res) => {
-  try {
-    const newAuthor = new author(req.body);
-    await newAuthor.save();
-    res.status(201).json({ status: "success", data: { newAuthor } });
-  } catch (e) {
-    res.status(500).json({ errorMessage: e.message });
-  }
+  cloudinary.uploader.upload(req.file.path, async (err, result) => {
+    try {
+      if (err) {
+        console.log(err);
+        return res.status(500).json({
+          success: false,
+          message: "Error",
+        });
+      }
+      const newAuthor = new author({
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        image: result.secure_url,
+        dateOfBirth: req.body.dateOfBirth,
+        disc: req.body.disc,
+      });
+      await newAuthor.save();
+      res.status(201).json({ status: "success", data: { newAuthor } });
+    } catch (e) {
+      res.status(500).json({ errorMessage: e.message });
+    }
+  });
 };
 
 const updateAuthor = async (req, res) => {
+  const authorId = req.params.id;
   try {
+    let updateData = { ...req.body };
+    if (req.file) {
+      const result = await cloudinary.uploader.upload(req.file.path);
+      updateData.image = result.secure_url;
+    }
     const updatedAuthor = await author.updateOne(
       { _id: req.params.authorId },
-      { $set: { ...req.body } }
+      { $set: updateData }
     );
     return res.status(200).json({ status: "success", data: { updatedAuthor } });
   } catch (e) {

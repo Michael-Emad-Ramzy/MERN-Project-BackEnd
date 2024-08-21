@@ -8,6 +8,10 @@ const categorySchema = new mongoose.Schema({
     minlength: 4,
     maxlength: 25,
   },
+  image: {
+    type: String,
+    required: true,
+  },
 });
 
 module.exports = mongoose.model("category", categorySchema);
