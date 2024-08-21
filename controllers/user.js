@@ -123,7 +123,7 @@ const addUSerBook = async (req, res) => {
 };
 
 ///////////////////////get one user book////////////////////////
-exports.getUserOneBook = async (req, res) => {
+const getUserOneBook = async (req, res) => {
   try {
     const user = await User.findById(req.body._id);
     const targetBook = user.books.find(
@@ -136,9 +136,35 @@ exports.getUserOneBook = async (req, res) => {
 };
 
 
+//////////////////update the user book shelve///////////////////////////
+exports.updateBookShelve = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.body._id);
+    const shelve = req.body.shelve;
+
+    const targetBook = user.books.find(
+      (book) => book.bookId == req.params.id ?? book.book
+    );
+    if (!targetBook) throw new Error("Unknown book!");
+
+    targetBook.shelve = shelve;
+    await user.save();
+
+    return res.status(200).json({
+      successMessage: "Book shelve updated successfully",
+      updatedBook: targetBook,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+
 module.exports = {
   getAllUsers,
   register,
   login,
   addUSerBook,
+  getUserOneBook,
+
 };
