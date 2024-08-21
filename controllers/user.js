@@ -122,7 +122,7 @@ const addUSerBook = async (req, res) => {
   }
 };
 
-///////////////////////get one user book////////////////////////
+////////////////////////get one user book////////////////////////
 const getUserOneBook = async (req, res) => {
   try {
     const user = await User.findById(req.body._id);
@@ -136,8 +136,8 @@ const getUserOneBook = async (req, res) => {
 };
 
 
-//////////////////update the user book shelve///////////////////////////
-exports.updateBookShelve = async (req, res, next) => {
+//////////////////update the user book shelve//////////////////////
+const updateBookShelve = async (req, res) => {
   try {
     const user = await User.findById(req.body._id);
     const shelve = req.body.shelve;
@@ -155,7 +155,7 @@ exports.updateBookShelve = async (req, res, next) => {
       updatedBook: targetBook,
     });
   } catch (error) {
-    next(error);
+    AppError.create(error.meassage, 400)
   }
 };
 
@@ -166,5 +166,5 @@ module.exports = {
   login,
   addUSerBook,
   getUserOneBook,
-
+  updateBookShelve,
 };
