@@ -1,7 +1,22 @@
 const express = require("express");
 const router = express.Router();
 const authorController = require("../controllers/author.js");
+const cloudinary = require("cloudinary").v2;
+const multer = require("multer");
 
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUDNAME,
+  api_key: process.env.CLOUDINARY_APIKEY,
+  api_secret: process.env.CLOUDINARY_APISECRET,
+});
+
+const storage = multer.diskStorage({
+  filename: function (req, file, cb) {
+    cb(null, new Date().toISOString().replace(/:/g, "-") + file.originalname);
+  },
+});
+
+const upload = multer({ storage });
 const {
   authorInformationConfirmation,
   validationresult,
@@ -13,6 +28,7 @@ router
   .route("/")
   .get(authorController.getAllAuthors)
   .post(
+    upload.single("image"),
     authorInformationConfirmation,
     validationresult,
     verfiyToken,
@@ -24,6 +40,7 @@ router
   .route("/:id")
   .get(authorController.getOneAuthor)
   .patch(
+    upload.single("image"),
     authorInformationConfirmation,
     validationresult,
     verfiyToken,
