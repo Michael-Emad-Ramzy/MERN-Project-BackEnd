@@ -2,7 +2,8 @@
 const asyncWrapper = require('../middleware/asyncWrapper');
 const admin = require('../models/admin');
 const bcrypt = require('bcrypt');
-const genJWT = require('../utils/generateJWT');
+const genJWT = require('../utils/generatejwt');
+
 
 // MANAGER ROLE
 const addAdmin = asyncWrapper(async (req, res) => {

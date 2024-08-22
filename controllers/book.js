@@ -22,18 +22,6 @@ const getSingleBook = async (req, res) => {
   }
 };
 
-// const addNewBook = async (req, res) => {
-//   try {
-//     const newBook = book(req.body);
-//     await newBook.save();
-//     res.status(201).json({ status: "Success", data: { newBook } });
-//   } catch (e) {
-//     res
-//       .status(500)
-//       .json({ status: "Fail", data: "Null", message: e.message, code: 400 });
-//   }
-// };
-
 const addNewBook = function (req, res) {
   cloudinary.uploader.upload(req.file.path, async (err, result) => {
     try {
@@ -49,6 +37,7 @@ const addNewBook = function (req, res) {
         image: result.secure_url,
         categoryId: req.body.categoryId,
         authorId: req.body.authorId,
+        rating: req.body.rating,
       });
       await newBook.save();
 
@@ -64,9 +53,15 @@ const addNewBook = function (req, res) {
 const updateBook = async (req, res) => {
   const bookId = req.params.id;
   try {
+    let updateData = { ...req.body };
+    if (req.file) {
+      const result = await cloudinary.uploader.upload(req.file.path);
+      updateData.image = result.secure_url;
+    }
+
     const updatedBook = await book.updateOne(
       { _id: bookId },
-      { $set: { ...req.body } }
+      { $set: updateData }
     );
     return res.status(200).json({ status: "success", data: { updatedBook } });
   } catch (e) {

@@ -19,6 +19,14 @@ const bookSchema = new mongoose.Schema({
     type: mongoose.Schema.ObjectId,
     ref: "author",
   },
+  rating: {
+    type: Number,
+    min: 0,
+    max: 5,
+  },
+  desc: {
+    type: String,
+  },
 });
 
 module.exports = mongoose.model("Book", bookSchema);
