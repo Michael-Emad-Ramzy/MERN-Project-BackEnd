@@ -6,7 +6,7 @@ const genJWT = require('../utils/generateJWT');
 
 // MANAGER ROLE
 const addAdmin = asyncWrapper(async (req, res) => {
-    if (req.currentUser.rank !== "MANAGER") {
+    if (req.currentUser.role !== "ADMIN") {
         return res.status(403).json({ status: "failed", message: "Forbidden" });
     }
     const newAdmin = new admin(req.body);
@@ -49,7 +49,7 @@ const adminLogin = asyncWrapper(async (req, res) => {
 
 // MANAGER ROLE
 const getAdmins = asyncWrapper(async (req, res) => {
-    if (req.currentUser.rank !== "MANAGER") {
+    if (req.currentUser.role !== "ADMIN") {
         return res.status(403).json({ status: "failed", message: "Forbidden" });
     }
     const admins = await admin.find().select('-__v');
@@ -57,7 +57,7 @@ const getAdmins = asyncWrapper(async (req, res) => {
 });
 
 const adminUpdateData = asyncWrapper(async (req, res) => {
-    if (req.currentUser.rank !== "MANAGER" || req.currentUser.rank !== "ADMIN") {
+    if (req.currentUser.role !== "ADMIN") {
         return res.status(403).json({ status: "failed", message: "Forbidden" });
     }
     const { email, newdata } = req.body;
@@ -70,7 +70,7 @@ const adminUpdateData = asyncWrapper(async (req, res) => {
 
 // MANAGER ROLE
 const deleteAdmin = asyncWrapper(async (req, res) => {
-    if (req.currentUser.rank !== "MANAGER") {
+    if (req.currentUser.role !== "ADMIN") {
         return res.status(403).json({ status: "failed", message: "Forbidden" });
     }
     const { email } = req.body;
