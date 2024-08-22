@@ -2,6 +2,9 @@ const express = require("express");
 const router = express.Router();
 
 const multer = require("multer");
+
+const cors = require("cors");
+
 const diskStorage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "uploads");
@@ -35,8 +38,6 @@ router
 
 router.route("/login").post(userController.login);
 
-
-router.route("/books/:id").post(verfiyToken,userController.addUSerBook);
-
+router.route("/books/:id").post(verfiyToken, userController.addUSerBook);
 
 module.exports = router;
