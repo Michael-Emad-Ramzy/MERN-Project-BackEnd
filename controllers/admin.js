@@ -2,7 +2,7 @@
 const asyncWrapper = require('../middleware/asyncWrapper');
 const admin = require('../models/admin');
 const bcrypt = require('bcrypt');
-const genJWT = require('../utils/generatejwt');
+const genJWT = require('../utils/generateJWT');
 
 const checker = asyncWrapper(async (req, res) => {
     if (req.currentUser.role !== "ADMIN") {
