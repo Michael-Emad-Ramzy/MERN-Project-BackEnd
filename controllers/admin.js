@@ -6,10 +6,10 @@ const genJWT = require('../utils/generateJWT');
 
 const checker = asyncWrapper(async (req, res) => {
     if (req.currentUser.role !== "ADMIN") {
-        return res.json({ status: "failed", message: "Forbidden" });
+        return res.status(403).json({ status: "failed", message: "Forbidden" });
     }
-    else{    
-    return res.status(201).json({ status: "success", message: "Identity Verified" });
+    else{
+        return res.status(201).json({ status: "success", message: "Identity Verified" });
     }
 });
 

@@ -35,6 +35,7 @@ const addNewBook = function (req, res) {
       const newBook = new book({
         title: req.body.title,
         image: result.secure_url,
+        desc: req.body.desc,
         categoryId: req.body.categoryId,
         authorId: req.body.authorId,
         rating: req.body.rating,
