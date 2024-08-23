@@ -27,6 +27,21 @@ const bookSchema = new mongoose.Schema({
   desc: {
     type: String,
   },
+  reviews: [
+    {
+      reviewerName: {
+        type: String,
+        required: true,
+      },
+      comment: {
+        type: String,
+      },
+      createdAt: {
+        type: Date,
+        default: Date.now,
+      },
+    },
+  ],
 });
 
 module.exports = mongoose.model("Book", bookSchema);
