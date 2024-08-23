@@ -9,7 +9,10 @@ router.route('/')
     .patch(verfiyAdminToken, adminController.adminUpdateData)
     .delete(verfiyAdminToken, adminController.deleteAdmin)
 
-router.route('/login')
+router.route('/adminlogin')
     .post(adminController.adminLogin)
+
+router.route('/checker')
+    .get(verfiyAdminToken, adminController.checker)
 
 module.exports = router;
