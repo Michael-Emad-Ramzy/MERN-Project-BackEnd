@@ -4,6 +4,11 @@ const router = express.Router();
 const multer = require("multer");
 
 const cors = require("cors");
+const app = express();
+
+app.use(cors({
+  origin: ["http://localhost:5000"],
+}));
 
 const diskStorage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -30,7 +35,9 @@ const userController = require("../controllers/user");
 const verfiyToken = require("../middleware/verfiyToken");
 const AppError = require("../utils/AppError");
 
-router.route("/").get(verfiyToken, userController.getAllUsers);
+router.route("/").get(
+  // verfiyToken,
+  userController.getAllUsers);
 
 router
   .route("/register")
