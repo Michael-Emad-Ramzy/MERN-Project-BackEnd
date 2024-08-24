@@ -15,9 +15,9 @@ const getAllUsers = async (req, res) => {
   const page = query.page || 1;
   const skip = (page - 1) * limit;
   try {
-    const users = await User.find({}, { __v: false, password: false })
-      // .limit(limit)
-      // .skip(skip);
+    const users = await User.find({}, { __v: false, password: false });
+    // .limit(limit)
+    // .skip(skip);
     res.json({ status: "success", data: { users } });
   } catch (e) {
     res.status(500).json({ errorMessage: e.message });
@@ -45,7 +45,7 @@ const register = async (req, res) => {
       lastName,
       email,
       password: hashedPassword,
-      avatar: req.file ? req.file.filename : undefined,
+      // avatar: req.file ? req.file.filename : undefined,
     });
 
     const token = await generateToken({

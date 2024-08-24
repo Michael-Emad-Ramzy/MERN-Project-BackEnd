@@ -82,25 +82,30 @@ const addReview = async (req, res) => {
     const { id } = req.params;
     const { reviewerName, rating, comment } = req.body;
 
+    const newReview = {
+      reviewerName,
+      rating,
+      comment,
+      createdAt: new Date().toISOString(),
+    };
+
     const updatedBook = await book.findByIdAndUpdate(
       id,
       {
         $push: {
-          reviews: {
-            reviewerName,
-            rating,
-            comment,
-          },
+          reviews: newReview,
         },
       },
       { new: true, runValidators: true }
     );
+
     if (!updatedBook) {
       return res
         .status(404)
         .json({ status: "Fail", data: { book: "Book not found" } });
     }
-    res.status(200).json({ status: "Success", data: { updatedBook } });
+
+    res.status(200).json({ status: "Success", data: newReview });
   } catch (e) {
     res.status(400).json({ status: "Fail", data: "Null", message: e.message });
   }
