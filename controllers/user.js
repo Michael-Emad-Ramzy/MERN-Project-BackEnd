@@ -16,8 +16,8 @@ const getAllUsers = async (req, res) => {
   const skip = (page - 1) * limit;
   try {
     const users = await User.find({}, { __v: false, password: false })
-      .limit(limit)
-      .skip(skip);
+      // .limit(limit)
+      // .skip(skip);
     res.json({ status: "success", data: { users } });
   } catch (e) {
     res.status(500).json({ errorMessage: e.message });
@@ -27,13 +27,17 @@ const getAllUsers = async (req, res) => {
 ////////////////////////register///////////////////////////
 const register = async (req, res) => {
   try {
+    console.log("Request Body:", req.body);
+    console.log("File:", req.file);
+
     const { firstName, lastName, email, password, role } = req.body;
 
     const oldUser = await User.findOne({ email: email });
     if (oldUser) {
-      return res.status(400).json({ errorMessage: "user already exist" });
+      return res.status(400).json({ errorMessage: "User already exists" });
     }
-    //password hashing
+
+    // Password hashing
     const hashedPassword = await bcrypt.hash(password, 8);
 
     const newUser = new User({
@@ -41,8 +45,7 @@ const register = async (req, res) => {
       lastName,
       email,
       password: hashedPassword,
-      role,
-      avatar: req.file.filename,
+      avatar: req.file ? req.file.filename : undefined,
     });
 
     const token = await generateToken({
@@ -53,8 +56,9 @@ const register = async (req, res) => {
     newUser.token = token;
 
     await newUser.save();
-    res.status(201).json({ status: "success", data: { user: newUser } });
+    res.status(201).json({ status: "success", data: { user: newUser }, token });
   } catch (e) {
+    console.error("Error during registration:", e);
     res.status(500).json({ errorMessage: e.message });
   }
 };
@@ -64,7 +68,7 @@ const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    if (!email && !password) {
+    if (!email || !password) {
       return res
         .status(400)
         .json({ errorMessage: "Email and password are required" });
@@ -79,7 +83,6 @@ const login = async (req, res) => {
     const matchedPassword = await bcrypt.compare(password, user.password);
 
     if (user && matchedPassword) {
-      // "Logged in successfully"
       const token = await generateToken({
         email: user.email,
         _id: user._id,
@@ -88,8 +91,8 @@ const login = async (req, res) => {
 
       return res.status(200).json({
         status: "success",
-        meassage: "logged in successfully",
-        data: { token: token },
+        message: "Logged in successfully", // Fixed typo
+        token, // Return the token directly
       });
     } else {
       return res

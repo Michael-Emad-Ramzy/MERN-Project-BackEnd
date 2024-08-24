@@ -2,6 +2,14 @@ const express = require("express");
 const router = express.Router();
 
 const multer = require("multer");
+
+const cors = require("cors");
+const app = express();
+
+app.use(cors({
+  origin: ["http://localhost:5000"],
+}));
+
 const diskStorage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "uploads");
@@ -27,7 +35,9 @@ const userController = require("../controllers/user");
 const verfiyToken = require("../middleware/verfiyToken");
 const AppError = require("../utils/AppError");
 
-router.route("/").get(verfiyToken, userController.getAllUsers);
+router.route("/").get(
+  // verfiyToken,
+  userController.getAllUsers);
 
 router
   .route("/register")
@@ -35,8 +45,6 @@ router
 
 router.route("/login").post(userController.login);
 
-
-router.route("/books/:id").post(verfiyToken,userController.addUSerBook);
-
+router.route("/books/:id").post(verfiyToken, userController.addUSerBook);
 
 module.exports = router;
