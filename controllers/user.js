@@ -118,7 +118,7 @@ const addUSerBook = async (req, res) => {
     user.save();
     res.status(200).json(user);
   } catch (error) {
-    AppError.create(error.meassage, 400)
+    AppError.create(error.meassage, 400);
   }
 };
 
@@ -131,10 +131,9 @@ const getUserOneBook = async (req, res) => {
     );
     res.status(200).json(targetBook);
   } catch (error) {
-    AppError.create(error.meassage, 400)
+    AppError.create(error.meassage, 400);
   }
 };
-
 
 //////////////////update the user book shelve//////////////////////
 const updateBookShelve = async (req, res) => {
@@ -155,10 +154,9 @@ const updateBookShelve = async (req, res) => {
       updatedBook: targetBook,
     });
   } catch (error) {
-    AppError.create(error.meassage, 400)
+    AppError.create(error.meassage, 400);
   }
 };
-
 
 module.exports = {
   getAllUsers,

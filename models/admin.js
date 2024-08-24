@@ -27,7 +27,7 @@ const adminSchema = new mongoose.Schema({
         type: String,
         default: 'No Photo'
     },
-    rank: {
+    role: {
         type: String,
         enum: [adminRoles.ADMIN, adminRoles.MANAGER],
         default: adminRoles.ADMIN

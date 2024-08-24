@@ -26,6 +26,7 @@ app.use("/", require("./routers/category"));
 app.use("/authors", require("./routers/author"));
 app.use("/users", require("./routers/user"));
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+app.use('/admin', require('./routers/admin'))
 
 // middel ware for not find routes
 app.all("*", (req, res) => {

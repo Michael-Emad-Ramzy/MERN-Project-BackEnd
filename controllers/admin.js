@@ -2,8 +2,16 @@
 const asyncWrapper = require('../middleware/asyncWrapper');
 const admin = require('../models/admin');
 const bcrypt = require('bcrypt');
-const genJWT = require('../utils/generatejwt');
+const genJWT = require('../utils/generateJWT');
 
+const checker = asyncWrapper(async (req, res) => {
+    if (req.currentUser.role !== "ADMIN") {
+        return res.status(403).json({ status: "failed", message: "Forbidden" });
+    }
+    else{
+        return res.status(201).json({ status: "success", message: "Identity Verified" });
+    }
+});
 
 // MANAGER ROLE
 const addAdmin = asyncWrapper(async (req, res) => {
@@ -27,7 +35,7 @@ const adminLogin = asyncWrapper(async (req, res) => {
             const token = await genJWT({
                 __id: emailCheck.__id,
                 email: emailCheck.email,
-                rank: emailCheck.rank
+                role: emailCheck.role
             });
             return res.status(200).json({
                 status: "success",
@@ -84,5 +92,6 @@ module.exports = {
     adminLogin,
     getAdmins,
     adminUpdateData,
-    deleteAdmin
+    deleteAdmin,
+    checker
 };

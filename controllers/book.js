@@ -35,6 +35,7 @@ const addNewBook = function (req, res) {
       const newBook = new book({
         title: req.body.title,
         image: result.secure_url,
+        desc: req.body.desc,
         categoryId: req.body.categoryId,
         authorId: req.body.authorId,
         rating: req.body.rating,
@@ -75,10 +76,41 @@ const deleteBook = async (req, res) => {
   await book.deleteOne({ _id: req.params.id });
   res.status(200).json({ status: "Success", data: "Null" });
 };
+
+const addReview = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { reviewerName, rating, comment } = req.body;
+
+    const updatedBook = await book.findByIdAndUpdate(
+      id,
+      {
+        $push: {
+          reviews: {
+            reviewerName,
+            rating,
+            comment,
+          },
+        },
+      },
+      { new: true, runValidators: true }
+    );
+    if (!updatedBook) {
+      return res
+        .status(404)
+        .json({ status: "Fail", data: { book: "Book not found" } });
+    }
+    res.status(200).json({ status: "Success", data: { updatedBook } });
+  } catch (e) {
+    res.status(400).json({ status: "Fail", data: "Null", message: e.message });
+  }
+};
+
 module.exports = {
   getAllBooks,
   getSingleBook,
   addNewBook,
   updateBook,
   deleteBook,
+  addReview,
 };

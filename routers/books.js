@@ -34,6 +34,7 @@ router
 router
   .route("/books/:id")
   .get(bookController.getSingleBook)
+  .post(verfiyToken, bookController.addReview)
   .patch(verfiyToken, allowedTo("ADMIN"), bookController.updateBook)
   .delete(verfiyToken, allowedTo("ADMIN"), bookController.deleteBook);
 
