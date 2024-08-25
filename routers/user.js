@@ -6,9 +6,11 @@ const multer = require("multer");
 const cors = require("cors");
 const app = express();
 
-app.use(cors({
-  origin: ["http://localhost:5000"],
-}));
+app.use(
+  cors({
+    origin: ["http://localhost:5000"],
+  })
+);
 
 const diskStorage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -37,8 +39,10 @@ const AppError = require("../utils/AppError");
 
 router.route("/").get(
   // verfiyToken,
-  userController.getAllUsers);
+  userController.getAllUsers
+);
 
+router.route("/:id").get(userController.getUserById);
 router
   .route("/register")
   .post(upload.single("avatar"), userController.register);

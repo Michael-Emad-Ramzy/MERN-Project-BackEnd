@@ -80,7 +80,14 @@ const deleteBook = async (req, res) => {
 const addReview = async (req, res) => {
   try {
     const { id } = req.params;
-    const { reviewerName, rating, comment } = req.body;
+    const { comment, reviewerName = "Anonymous", rating = 0 } = req.body;
+
+    if (!comment) {
+      return res.status(400).json({
+        status: "Fail",
+        data: "Review must include a comment",
+      });
+    }
 
     const newReview = {
       reviewerName,
@@ -89,7 +96,7 @@ const addReview = async (req, res) => {
       createdAt: new Date().toISOString(),
     };
 
-    const updatedBook = await book.findByIdAndUpdate(
+    const updatedbook = await book.findByIdAndUpdate(
       id,
       {
         $push: {
@@ -99,15 +106,25 @@ const addReview = async (req, res) => {
       { new: true, runValidators: true }
     );
 
-    if (!updatedBook) {
+    if (!updatedbook) {
       return res
         .status(404)
         .json({ status: "Fail", data: { book: "Book not found" } });
     }
 
-    res.status(200).json({ status: "Success", data: newReview });
+    res.status(200).json({
+      status: "Success",
+      data: {
+        book: updatedbook,
+        review: newReview,
+      },
+    });
   } catch (e) {
-    res.status(400).json({ status: "Fail", data: "Null", message: e.message });
+    res.status(400).json({
+      status: "Fail",
+      data: null,
+      message: e.message,
+    });
   }
 };
 

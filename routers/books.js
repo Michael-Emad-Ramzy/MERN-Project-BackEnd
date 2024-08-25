@@ -21,20 +21,17 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-router
-  .route("/books")
-  .get(bookController.getAllBooks)
-  .post(
-    verfiyToken,
-    allowedTo("ADMIN"),
-    upload.single("image"),
-    bookController.addNewBook
-  );
+router.route("/books").get(bookController.getAllBooks).post(
+  // verfiyToken,
+  // allowedTo("ADMIN"),
+  upload.single("image"),
+  bookController.addNewBook
+);
 
 router
   .route("/books/:id")
   .get(bookController.getSingleBook)
-  .post(verfiyToken, bookController.addReview)
+  .post(bookController.addReview)
   .patch(verfiyToken, allowedTo("ADMIN"), bookController.updateBook)
   .delete(verfiyToken, allowedTo("ADMIN"), bookController.deleteBook);
 

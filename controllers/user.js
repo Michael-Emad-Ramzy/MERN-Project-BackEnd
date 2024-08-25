@@ -23,6 +23,27 @@ const getAllUsers = async (req, res) => {
     res.status(500).json({ errorMessage: e.message });
   }
 };
+/////////////////////////get user by ID///////////////////////////
+const getUserById = async (req, res) => {
+  try {
+    const userId = req.params.id;
+
+    if (!userId) {
+      return res.status(400).json({ errorMessage: "User ID is required" });
+    }
+
+    const user = await User.findById(userId, { __v: false, password: false });
+
+    if (!user) {
+      return res.status(404).json({ errorMessage: "User not found" });
+    }
+
+    res.status(200).json({ status: "success", data: { user } });
+  } catch (e) {
+    console.error("Error fetching user by ID:", e);
+    res.status(500).json({ errorMessage: e.message });
+  }
+};
 
 ////////////////////////register///////////////////////////
 const register = async (req, res) => {
@@ -168,4 +189,5 @@ module.exports = {
   addUSerBook,
   getUserOneBook,
   updateBookShelve,
+  getUserById,
 };
