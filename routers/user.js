@@ -51,4 +51,6 @@ router.route("/login").post(userController.login);
 
 router.route("/books/:id").post(verfiyToken, userController.addUSerBook);
 
+router.route("/books/:id").post(verfiyToken, userController.updateBookShelve);
+
 module.exports = router;

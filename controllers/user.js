@@ -163,12 +163,12 @@ const getUserOneBook = async (req, res) => {
 const updateBookShelve = async (req, res) => {
   try {
     const user = await User.findById(req.body._id);
-    const shelve = req.body.shelve;
+    if (!user) throw new Error("User not found!");
 
-    const targetBook = user.books.find(
-      (book) => book.bookId == req.params.id ?? book.book
-    );
-    if (!targetBook) throw new Error("Unknown book!");
+    const { shelve } = req.body;
+
+    const targetBook = user.books.find((book) => book.bookId == req.params.id);
+    if (!targetBook) throw new Error("Book not found!");
 
     targetBook.shelve = shelve;
     await user.save();
@@ -178,9 +178,10 @@ const updateBookShelve = async (req, res) => {
       updatedBook: targetBook,
     });
   } catch (error) {
-    AppError.create(error.meassage, 400);
+    return res.status(400).json({ message: error.message });
   }
 };
+
 
 module.exports = {
   getAllUsers,
