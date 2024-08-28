@@ -18,7 +18,7 @@ mongoose
 
   app.use(cors({
     origin: "http://localhost:5173", // Your frontend's origin
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     credentials: true, // Allow credentials (cookies, authorization headers, etc.)
   }));
 
