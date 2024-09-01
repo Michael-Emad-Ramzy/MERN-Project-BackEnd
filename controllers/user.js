@@ -23,6 +23,7 @@ const getAllUsers = async (req, res) => {
     res.status(500).json({ errorMessage: e.message });
   }
 };
+
 /////////////////////////get user by ID///////////////////////////
 const getUserById = async (req, res) => {
   try {
@@ -113,7 +114,8 @@ const login = async (req, res) => {
       return res.status(200).json({
         status: "success",
         message: "Logged in successfully", // Fixed typo
-        token, // Return the token directly
+        token,
+        user,
       });
     } else {
       return res
@@ -182,6 +184,88 @@ const updateBookShelve = async (req, res) => {
   }
 };
 
+//////////////////add book to favorite//////////////////////
+const addToFavorite = async (req, res) => {
+  try {
+    const { _id, bookId } = req.body;
+
+    const user = await User.findById(_id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found!" });
+    }
+    const targetBook = user.books.find((book) => book.bookId.equals(bookId));
+
+    if (targetBook) {
+      targetBook.isFavorite = true;
+    } else {
+      const newBook = {
+        bookId: bookId,
+        isFavorite: true,
+      };
+      user.books.push(newBook);
+    }
+    await user.save();
+
+    return res.status(200).json({
+      successMessage: "Book added to favorites successfully",
+      updatedBooks: user.books,
+    });
+  } catch (error) {
+    return res.status(400).json({ message: error.message });
+  }
+};
+
+
+
+///////////////////////get the user books/////////////////////
+const getUserBooks = async (req, res, next) => {
+  try {
+    // Find the user by ID and select only the books field
+    const user = await User.findById(req.params.id).select("books");
+    if (!user) {
+      return res.status(404).json({
+        errorMessage: "User not found",
+      });
+    }
+
+    // If there are no books in the user, return a success message
+    const numberOfBooks = user.books.length;
+    if (numberOfBooks === 0) {
+      return res.status(200).json({
+        successMessage: "There are no books added yet",
+      });
+    }
+
+    const booksWithDetails = [];
+
+    // Fetch details for each book
+    for (const book of user.books) {
+      const bookDetails = await Book.findById(book.bookId);
+      if (bookDetails) {
+        const bookObject = {
+          bookId: book.bookId,
+          bookName: bookDetails.bookName,
+          shelve: book.shelve,
+          rate: book.rate,
+          isFavorite: book.isFavorite,
+        };
+        booksWithDetails.push(bookObject);
+      }
+    }
+
+    return res.status(200).json({
+      "number of books": numberOfBooks,
+      "the books": booksWithDetails,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      errorMessage: "Error occurred",
+    });
+  }
+};
+
+
 
 module.exports = {
   getAllUsers,
@@ -191,4 +275,6 @@ module.exports = {
   getUserOneBook,
   updateBookShelve,
   getUserById,
+  addToFavorite,
+  getUserBooks,
 };
