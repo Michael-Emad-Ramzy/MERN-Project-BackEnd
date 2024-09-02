@@ -16,11 +16,12 @@ mongoose
     console.error("could not connect to MongoDB", err);
   });
 
-  app.use(cors({
-    origin: "http://localhost:5173", // Your frontend's origin
-    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
-    credentials: true, // Allow credentials (cookies, authorization headers, etc.)
-  }));
+// app.use(cors({
+//   origin: "http://localhost:5173", // Your frontend's origin
+//   methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+//   credentials: true, // Allow credentials (cookies, authorization headers, etc.)
+// }));
+app.use(cors());
 
 app.use(express.json());
 
@@ -31,7 +32,7 @@ app.use("/", require("./routers/category"));
 app.use("/authors", require("./routers/author"));
 app.use("/users", require("./routers/user"));
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
-app.use('/admin', require('./routers/admin'))
+app.use("/admin", require("./routers/admin"));
 
 // middel ware for not find routes
 app.all("*", (req, res) => {
