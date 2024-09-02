@@ -53,4 +53,8 @@ router.route("/books/:id").post(verfiyToken, userController.addUSerBook);
 
 router.route("/books/:id").post(verfiyToken, userController.updateBookShelve);
 
+router.route("/books/:id").post(verfiyToken, userController.addToFavorite);
+
+router.route('/:id').get(verfiyToken , userController.getUserById);
+
 module.exports = router;

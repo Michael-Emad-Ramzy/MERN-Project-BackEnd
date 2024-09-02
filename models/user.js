@@ -52,6 +52,10 @@ const userSchema = new mongoose.Schema({
         default: "want to read",
         enum: ["read", "reading", "want to read"],
       },
+      isFavorite: {
+        type: Boolean,
+        default: false,
+      },
     },
   ],
 });
