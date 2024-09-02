@@ -27,6 +27,7 @@ const allowedOrigins = [
   "http://localhost:5173",
   // Add other allowed origins here
   "https://goodreadfdm.vercel.app",
+  "https://goodreaditi.netlify.app",
 ];
 
 app.use(
