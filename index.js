@@ -16,12 +16,32 @@ mongoose
     console.error("could not connect to MongoDB", err);
   });
 
-// app.use(cors({
-//   origin: "http://localhost:5173", // Your frontend's origin
-//   methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
-//   credentials: true, // Allow credentials (cookies, authorization headers, etc.)
-// }));
-app.use(cors());
+// app.use(
+//   cors({
+//     origin: "http://localhost:5173", // Your frontend's origin
+//     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+//     credentials: true, // Allow credentials (cookies, authorization headers, etc.)
+//   })
+// );
+const allowedOrigins = [
+  "http://localhost:5173",
+  // Add other allowed origins here
+  "https://goodreadfdm.vercel.app",
+];
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+    credentials: true, // Allow credentials (cookies, authorization headers, etc.)
+  })
+);
 
 app.use(express.json());
 
